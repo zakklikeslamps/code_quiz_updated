@@ -154,7 +154,6 @@ function finish() {
   time.innerHTML = "";
 
   // header
-
   var createHead = document.createElement("h1");
   createHead.setAttribute("id", "createHead");
   createHead.textContent = "GAME OVER";
@@ -191,21 +190,21 @@ function finish() {
   dataDiv.appendChild(input);
 
   //submit initials
-  var submit = dofcument.creatElement("button");
+  var submit = document.createElement("button");
   submit.setAttribute("type", "submit");
-  submit.setAttribute("id", "Submit");
+  submit.setAttribute("id", "submit");
   submit.textContent = "Submit";
   dataDiv.appendChild(submit);
 
   submit.eventListener("click", function () {
     var initials = input.value;
-    if (initials === null) {
+    if (initials === undefined) {
       alert("Please enter valid initials (3)");
 
-    } else if (initials > 3) {
-      alert("Please enter valid initials (3)");
-
-    } else {
+    } /*else if (initials > 3) {
+      alert("Please enter valid initials (3)"); }*/ 
+      
+      else {
       var finalScore = {
         initials: initials, 
         score: timeLeft
@@ -227,7 +226,7 @@ function finish() {
       localStorage.setItem("allScores", nextScore);
       window.location.replace("highscores.html");
     }
-    
+
   });
 
 }
