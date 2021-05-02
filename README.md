@@ -1,17 +1,46 @@
 # JS_Code_Quiz
 
-**Fourth Assignment: Creating a quiz using Javascript**
-This was a difficult assignment that I still have not fully figured out. The idea is to build, from scratch, a page that utilizes Javascript 
-to create a quiz about general coding. Included within is a thirty-second timer, a start button to commence the quiz itself, a form to input a
-user's initials to go with their highscore at the end of the quiz, along with a submit button, a link to the highscores, a "Clear" button which 
-gives the option to clear all highscores and a "Return to Quiz" button.
+## Contents
+  
+  *[Project Name](#project)
+  *[Description](#description)
+  *[Github](#github)
+  *[Email](#email)
+  *[Installation](#installation)
+  *[Usage](#usage)
+  *[Questions](#questions)
+  *[Contributors](#contributors)
+  *[Links](#links)
 
-**Contributors**
+  ## Project Name
+  Code Quiz
+
+  ##Description
+  A brief quiz about general coding; written in JS.
+
+  ## Installation 
+  Please install the necessary dependencies by running the following comand:
+
+  None: View in github environments.
+
+  ## Usage 
+  Open in github envirnonments, begin quiz. 
+
+
+  ## Github Username
+  zakklikeslamps
+
+  ## Email 
+  zakklikeslamps@gmail.com
+
+  Please email or DM me on Github with any questions.
+
+## Contributors
 Zakk Ryan Haug (main)
 Chris Picano (help)
 Cliff Horvick (help)
 Morgan Bailey (help)
 
-**Github Links**
-https://github.com/zakklikeslamps/JS_Code_Quiz
-https://zakklikeslamps.github.io/JS_Code_Quiz/
+## Links
+https://github.com/zakklikeslamps/code_quiz_updated
+https://zakklikeslamps.github.io/code_quiz_updated
