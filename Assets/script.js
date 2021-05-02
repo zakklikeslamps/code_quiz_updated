@@ -1,172 +1,233 @@
-//Selects all ID elements to be interacted with via HTML
-var header = document.getElementById("main-head");
-var scoresContainer = document.getElementById("scores");
-var timer = document.getElementById("countdown");
-var quizContainer = document.getElementById("quiz");
-var quizQuestions = document.getElementById("question");
-var currentIndex = 0;
-var seeResults = document.getElementById("results");
-var startQuiz = document.getElementById("quiz-start");
-var finishQuiz = document.getElementById("quiz-end");
-var finalScore = document.getElementById("final-score");
-var time;
-var timeDisplayP = document.createElement("p");
-timer.append(timeDisplayP);
-timeDisplayP.innerHTML = "";
+// Questions/Choices contained as objects within array
+var questions = [
 
-//Storing score & user input to localstorage
-var userInfo = document.getElementById("initials");
-userInfo.textContent = "";
+  {
+    question: "What does HTML stand for?",
+    answers: [
+      "Hitmonlee",
+      "Hitman Lives",
+      "Happytime-Makeup-Language",
+      "Hypertext-Markup-Language",
+    ],
+    correctAnswer: "Hypertext-Markup-Language",
+  },
 
-//Creates access to the highscore page
-var scoresText = document.createElement("a");
-scoresText.setAttribute("href", "highscores.html");
-scoresText.innerHTML = "See High Scores";
-scores.appendChild(scoresText);
+  {
+    question: "What does CSS stand for?",
+    answers: [
+      "Come See the Show",
+      "Catch Some Surf",
+      "Corrupt Section Secured",
+      "Cascading Style Sheets",
+    ],
+    correctAnswer: "Cascading Style Sheets",
+  },
 
-//User's task; Header/main text
-var headText = document.createElement("p");
-headText.innerHTML =
-  "Try to answer the questions correctly within the time limit. If you answer incorrectly you will lose time.";
+  {
+    question: "What is the relationship between HTML & CSS?",
+    answers: [
+      "They work in tandem to make powerful, interactive webpages.",
+      "CSS creates a web page while HTML provies it's functionality.",
+      "HTML is a web page's basic elemental structure, while CSS styles those elements.",
+      "None: They're independent of each other.",
+    ],
+    correctAnswer:
+      "HTML is a web page's basic elemental structure, while CSS styles those elements.",
+  },
 
-//Start Quiz
-quizContainer.appendChild(headText);
-var startButton = document.createElement("button");
-startButton.setAttribute("class", "btn-info");
-startButton.innerHTML = "Start Quiz";
-startQuiz.appendChild(startButton);
-timer.textContent = "Timer : ";
+  {
+    question: "What does JavaScript do for a web page?",
+    answers: [
+      "Provides basic interactivity & functionality for users.",
+      "Creates links to other web pages.",
+      "Opens new tabs in a browser.",
+      "All the above",
+    ],
+    correctAnswer: "Provides basic interactivity & functionality for users.",
+  },
 
-//Start Button
-startQuiz.addEventListener("click", function () {
-  timer = setInterval(startTimer, 1000);
-  console.log("Start");
+  {
+    question: "BONUS! Quiz custodiet ipsos custodes?",
+    answers: ["JLU", "Avengers", "TMNT", "All the above"],
+    correctAnswer: "All the above",
+  },
 
-  //Starts timer
-  function startTimer() {
-    var timeLeft = 30;
-    var timeInterval = setInterval(function () {
-      if (timeLeft > 1) {
-        timer.textContent = "Time: " + timeLeft + "seconds";
-        timeLeft -= 1;
-      } else if (timeLeft === 1) {
-        timer.textContent = "Time: " + timeLeft + "second";
-        timeLeft -= 1;
-      } else {
-        timer.textContent = timeLeft + " ";
-        clearInterval(timeInterval);
+];
+
+//Initialize: set vars. to zero
+var quesIndex = 0;
+var score = 0;
+var dataIndex = 0;
+
+//Begin Quiz w/ 60 sec.
+var presentTime = document.querySelector("#presentTime");
+var time = document.querySelector("#start");
+var dataDiv = document.querySelector("#dataDiv");
+var container = document.querySelector("#container");
+var secLeft = 60;
+var interval = 0;
+
+//Adds <ul> element when needed
+var ulCreate = document.querySelector("#choices");
+
+//Timer starts when button is clicked
+time.addEventListener("click", function () {
+
+  if (interval === 0) {
+    interval = setInterval(function () {
+      secLeft--;
+      presentTime.textContent = "Time: " + secLeft;
+
+      if (secLeft <= 0) {
+        clearInterval(interval);
+        timeUp();
+        presentTime.textContent = "Sorry, your time is up.";
       }
-      //Showing Questions
-      function showquestion() {
-        var currentQuestion = questions[currentIndex];
-        currentQuestion.answers.forEach(function( userChoices, currentIndex)
-        var userQuestion = questions[questionsIndex].question;
-        var userchoices = questions[questionsIndex].answers;
 
+    }, 1000);
 
-        quizContainer.textContent = userQuestion;
-    
-        for (i = 0; i < userchoices.length; i++) {
-          var choicesButton = document.createElement("button");
-          //choicesButton.setAttribute();
-          choicesButton.textContent = userchoices[i];
-          quizContainer.appendChild(choicesButton);
-          choicesButton.addEventListener("click", checkAnswer);
-        }
-      }
-      showquestion();
-
-      //Checking Answers
-      function checkAnswer(event) {
-        var quizQuestions = questions.length;
-        var answer = questions[questionsIndex].answer;
-        var correctAnswer = event.target.correctAnswer;
-
-        if (correctAnswer === answer) {
-          seeResults.textContent = "Correct";
-          score++;
-          console.log(score);
-          finalScore.textContent = "You scored " + score + "!";
-        } else {
-          seeResults.textContent = "Wrong";
-          secondsLeft -= 6;
-        }
-
-        if (questions.length === quizQuestions) {
-          timeLeft = 0;
-          quizContainer.classList.add("d-none");
-          results.classList.add("d-none");
-          finishQuiz.classList.remove("d-none");
-        } else {
-          questionIndex++;
-          showQuestion();
-        }
-      }
-    });
   }
-  startTimer();
 
-  //Set Variables
-  var questionsIndex = 0;
-  var score = 0;
+  render(quesIndex);
 
-  /*var timer = document.querySelector("#start");
-var holdInterval = 0;
+});
 
-timer.addEventListener("click", function () {
+//pulls questions & answers from array
+function render(quesIndex) {
+  dataDiv.innerHTML = "";
+  ulCreate.innerHTML = "";
 
-    if (holdInterval === 0) {
-        holdInterval = setInterval(function () {
-            secondsLeft--;
-            timer.textContent = "Time: " + secondsLeft;
+  for (var i = 0; i < questions.length; i++) {
+    var userQues = questions[quesIndex].question;
+    var userChoice = questions[quesIndex].answers;
+    dataDiv.textContent = userQues;
+  }
 
-            if (secondsLeft <= 0) {
-                clearInterval(holdInterval);
+  userChoice.forEach(function (newItem) {
+    var item = document.createElement("li");
+    item.textContent = newItem;
+    dataDiv.appendChild(ulCreate);
+    ulCreate.appendChild(item);
+    item.addEventListener("click", compare);
+  });
+}
 
-                timer.textContent = "GAME OVER";
-            }
-        }, 1000);
-    }*/
+//compares user's answer choice to correct answer
+//correct-move on incorrect-time deduction
+function compare (event) {
+  var element = event.target;
 
-  /*var timeInterval = setInterval(function () {
-    timer.innerHTML = "Timer: Only" + timeLeft + "seconds left!"
-    if (timeLeft === 0) {
-        clearInterval(timeInterval);
+  if(element.matches("li")) {
+    var createDiv = document.createElement("div");
+    createDiv.setAttribute("id", "createDiv");
 
-        console.log("Time's Up.");
-    }
-    if (timeLeft <= 0) {
-        clearInterval;
-    }
-    else {
-        timeLeft--;
-        timer.textContent = "Time Left " + timeLeft;
-    }
-}, 1000);*/
+    if (element.textContent == questions[quesIndex].correctAnswer) {
+      score++;
+      createDiv.textContent = "Correct!";
 
-  //Submit Button
-  var userScore;
-  var submitInfoButton = document.getElementById("submit");
-  submitInfoButton.addEventListener("click", function () {
-    var initialText = userInfo.value;
-    if (initialText.length === 0) {
-      alert("Error: Please enter your initials.");
     } else {
-      var finalText = {
-        initials: initialText,
-        score: userScore,
-      };
-      console.log(finalText);
+      secLeft = secLeft - 10;
+      createDiv.textContent = "Sorry. The correct answer was" + questions[quesIndex].correctAnswer
+    }
+    
+  }
+
+  //proceeds with quiz after each question is answered
+  //if the final question is answered the finish function is called 
+  quesIndex++;
+
+  if (quesIndex >= questions.length) {
+    finish();
+    createDiv.textContent = "You answered " + score + "!";
+
+  } else {
+    render(quesIndex);
+
+  }
+  dataDiv.appendChild(createDiv);
+
+}
+
+//if quiz is finished data is cleared 
+function finish() {
+  dataDiv.innerHTML = "";
+  time.innerHTML = "";
+
+  // header
+
+  var createHead = document.createElement("h1");
+  createHead.setAttribute("id", "createHead");
+  createHead.textContent = "GAME OVER";
+  dataDiv.appendChild(createHead);
+
+  // p
+  var createP = document.createElement("p");
+  createP.setAttribute("id", "createP");
+  dataDiv.appendChild(createP);
+
+  //add time + score for final score
+  if (secLeft >= 0) {
+    var timeLeft = secLeft;
+    var createP2 = document.createElement("p");
+    clearInterval(interval);
+    if (timeLeft === undefined) {
+      timeLeft = 0
+    }
+    createP2.textContent ="Final Score: " + timeLeft;
+    dataDiv.appendChild(createP2);
+  }
+
+  //require initials for high scores page
+  var label = document.createElement("label");
+  label.setAttribute("id", "label");
+  label.textContent = "Enter Your Initiails";
+  dataDiv.appendChild(label);
+
+  //get initials
+  var input = document.createElement("input");
+  input.setAttribute("type", "text");
+  input.setAttribute("id", "initials");
+  input.textContent = "";
+  dataDiv.appendChild(input);
+
+  //submit initials
+  var submit = dofcument.creatElement("button");
+  submit.setAttribute("type", "submit");
+  submit.setAttribute("id", "Submit");
+  submit.textContent = "Submit";
+  dataDiv.appendChild(submit);
+
+  submit.eventListener("click", function () {
+    var initials = input.value;
+    if (initials === null) {
+      alert("Please enter valid initials (3)");
+
+    } else if (initials > 3) {
+      alert("Please enter valid initials (3)");
+
+    } else {
+      var finalScore = {
+        initials: initials, 
+        score: timeLeft
+      }
+
       var allScores = localStorage.getItem("allScores");
       if (allScores === null) {
         allScores = [];
       } else {
-        allScores = JSON.parse(allScores);
+        allScores=JSON.parse(allScores);
       }
-      allScores.push(finalText);
-      var newScore = JSON.stringify(allScores);
-      localStorage.setItem("allScores", newScore);
-      window.location.href = "highscores.html";
+
+      if(finalScore.score === null) {
+        finalScore.score = 0;
+      }
+
+      allScores.push(finalScore);
+      var nextScore = JSON.stringify(allScores);
+      localStorage.setItem("allScores", nextScore);
+      window.location.replace("highscores.html");
     }
+    
   });
-});
+
+}
