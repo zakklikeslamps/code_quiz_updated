@@ -179,30 +179,30 @@ function finish() {
   //require initials for high scores page
   var label = document.createElement("label");
   label.setAttribute("id", "label");
-  label.textContent = "Enter Your Initiails";
+  label.textContent = "Enter Your Initiails: ";
   dataDiv.appendChild(label);
 
   //get initials
   var input = document.createElement("input");
   input.setAttribute("type", "text");
   input.setAttribute("id", "initials");
-  input.textContent = "";
+  input.textContent = " ";
   dataDiv.appendChild(input);
 
   //submit initials
   var submit = document.createElement("button");
-  submit.setAttribute("type", "submit");
+  submit.setAttribute("type", "button");
   submit.setAttribute("id", "submit");
   submit.textContent = "Submit";
   dataDiv.appendChild(submit);
 
-  submit.eventListener("click", function () {
+  submit.addEventListener("click", function () {
     var initials = input.value;
     if (initials === undefined) {
       alert("Please enter valid initials (3)");
 
-    } /*else if (initials > 3) {
-      alert("Please enter valid initials (3)"); }*/ 
+    } else if (initials > 3) {
+      alert("Please enter valid initials (3)"); } 
       
       else {
       var finalScore = {
